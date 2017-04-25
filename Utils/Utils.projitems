@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BinarySearch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BoxedEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Compare.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DateTimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EmptyCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HashHelpers.cs" />
