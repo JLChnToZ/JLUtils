@@ -25,14 +25,14 @@ namespace Utils {
             if(comparer == null)
                 comparer = Comparer<T>.Default;
             int count = sortedList.Count;
-            if(lowerBoundIndex < 0 || lowerBoundIndex >= count)
+            if(lowerBoundIndex < 0 || lowerBoundIndex > count || (count > 0 && lowerBoundIndex == count))
                 throw new ArgumentOutOfRangeException(
                     "lowerBoundIndex",
                     lowerBoundIndex,
                     string.Format(LowerBoundOutOfRangeMsg, count)
                 );
             if(upperBoundIndex < 0) upperBoundIndex = count + upperBoundIndex;
-            if(upperBoundIndex < lowerBoundIndex || upperBoundIndex >= count)
+            if((count > 0 && (upperBoundIndex == count || upperBoundIndex < lowerBoundIndex)) || upperBoundIndex > count)
                 throw new ArgumentOutOfRangeException(
                     "upperBoundIndex",
                     upperBoundIndex,
