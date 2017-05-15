@@ -68,6 +68,57 @@ namespace Utils {
             return -1;
         }
 
+        public static bool BinarySerachRange<T>(IList<T> sortedList, T entry,
+            out int firstIndex, out int lastIndex,
+            IComparer<T> comparer = null,
+            int fromIndex = 0, int toIndex = -1) {
+            if(comparer == null)
+                comparer = Comparer<T>.Default;
+            firstIndex = BinarySearchIndex(
+                sortedList, entry,
+                BinarySearchMethod.FirstExact,
+                fromIndex, toIndex, comparer
+            );
+            lastIndex = firstIndex < 0 ? -1 : BinarySearchIndex(
+                sortedList, entry,
+                BinarySearchMethod.LastExact,
+                firstIndex, toIndex, comparer
+            );
+            return firstIndex >= 0;
+        }
+
+        public static int BinarySearchExacts<T>(this IList<T> sortedList, T entry,
+            IComparer<T> comparer = null,
+            IEqualityComparer<T> equalityComparer = null,
+            int fromIndex = 0, int toIndex = -1) {
+            if(sortedList == null)
+                throw new ArgumentNullException("sortedList");
+            if(equalityComparer == null)
+                equalityComparer = EqualityComparer<T>.Default;
+            int firstIndex, lastIndex;
+            if(BinarySerachRange(sortedList, entry, out firstIndex, out lastIndex, comparer, fromIndex, toIndex))
+                for(int i = firstIndex; i <= lastIndex; i++)
+                    if(equalityComparer.Equals(entry, sortedList[i]))
+                        return i;
+            return -1;
+        }
+
+        public static int BinarySearchLastExacts<T>(this IList<T> sortedList, T entry,
+            IComparer<T> comparer = null,
+            IEqualityComparer<T> equalityComparer = null,
+            int fromIndex = 0, int toIndex = -1) {
+            if(sortedList == null)
+                throw new ArgumentNullException("sortedList");
+            if(equalityComparer == null)
+                equalityComparer = EqualityComparer<T>.Default;
+            int firstIndex, lastIndex;
+            if(BinarySerachRange(sortedList, entry, out firstIndex, out lastIndex, comparer, fromIndex, toIndex))
+                for(int i = lastIndex; i >= firstIndex; i--)
+                    if(equalityComparer.Equals(entry, sortedList[i]))
+                        return i;
+            return -1;
+        }
+
         public static T FindClosestValue<T>(
             this IList<T> sortedList, T key,
             bool findLarger,
@@ -85,7 +136,7 @@ namespace Utils {
             return resultIdx < 0 || sortedList.Count < 1 ? defaultValue : sortedList[resultIdx];
         }
 
-        public static void InsertInOrdered<T>(
+        public static int InsertInOrdered<T>(
             this IList<T> sortedList, T item,
             IComparer<T> comparer = null,
             int fromIndex = 0, int toIndex = -1) {
@@ -102,6 +153,7 @@ namespace Utils {
                 sortedList.Add(item);
             else
                 sortedList.Insert(index < 0 ? 0 : index, item);
+            return index;
         }
 
         public static void InsertInOrdered<T>(
